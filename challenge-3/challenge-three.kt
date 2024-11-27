@@ -1,19 +1,27 @@
 fun findNaughtyStep(original: String, modified: String): String {
-    val isOriginalLonger = original.length > modified.length  
-   
-    // Zip, me devuelve los valores en pares ejemplo hola.zip(holo) -> [(h,h), ..., (a, o)]
-    // indexOfFirst, me deuvelve el primer valor del indice que cumpla la condición
-    val differentIndex = original.zip(modified).indexOfFirst {(o , m) -> o != m}
-
-    if(differentIndex == -1) return if(isOriginalLonger) original.last().toString() else ""
+    val originalGrantToModified = original.length > modified.length  
+    val originalSplitByLetter = original.toList()
+    val modifiedSplitByLetter = modified.toList()
     
-    return if(isOriginalLonger) original[differentIndex].toString() 
-           else modified[differentIndex].toString()
+    val arr = modifiedSplitByLetter.mapIndexed { index, letter -> 
+       try {
+           letter == originalSplitByLetter[index]
+       } catch(e: Exception) {
+           false
+       }
+    }
+    
+    val differentLetterIndex = arr.indexOf(false)
+    
+    if(differentLetterIndex == -1) return if(originalGrantToModified) original.last().toString() else ""
+    
+    return if(original.length > modified.length) original[differentLetterIndex].toString() 
+           else modifiedSplitByLetter[differentLetterIndex].toString()
 }
-    
+   
 fun main() {
     val original = "stepfor"
-    val modified = "stepfor"
+    val modified = "stepxor"
    
     println(findNaughtyStep(original, modified))
 }
